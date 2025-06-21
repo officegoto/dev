@@ -1,0 +1,75 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: app
+    volumes:
+      - ./src:/src
+    working_dir: /src
+    networks:
+      - dev-network
+    depends_on:
+      - mysql
+      - redis
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: nginx
+    volumes:
+      - ./src/public:/src/public
+      - ./docker/nginx/logs:/var/log/nginx
+    ports:
+      - "80:80"
+    networks:
+      - dev-network
+    depends_on:
+      - app
+
+  nuxt:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/nuxt/Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+    networks:
+      - dev-network
+    depends_on:
+      - app
+
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    env_file:
+      - ./docker/.env.docker
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    networks:
+      - dev-network
+
+  redis:
+    image: redis:7.0.12
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
+
+volumes:
+  db_data:

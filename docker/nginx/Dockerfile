@@ -1,0 +1,17 @@
+FROM nginx:1.26
+
+# AWS CLI をインストール（SSM Parameter Store を使用するため）
+RUN apt-get update && apt-get install -y awscli && rm -rf /var/lib/apt/lists/*
+
+# Laravelの public ディレクトリのみをコピー（ECS用）
+COPY ./src/public /src/public
+
+# ローカル用の default.conf をコピー
+COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# `entrypoint.sh` をコンテナにコピーして実行権限を付与
+COPY ./docker/nginx/nginx-entrypoint.sh /usr/local/bin/nginx-entrypoint.sh
+RUN chmod +x /usr/local/bin/nginx-entrypoint.sh
+
+# コンテナ起動時に entrypoint.sh を実行
+ENTRYPOINT ["/usr/local/bin/nginx-entrypoint.sh"]

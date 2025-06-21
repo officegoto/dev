@@ -1,0 +1,16 @@
+FROM node:20
+
+# 作業ディレクトリを作成
+WORKDIR /app
+
+# package.json と lockファイルを先にコピー（キャッシュ効かせる）
+COPY package*.json ./
+
+# 依存パッケージをインストール
+RUN npm install
+
+# フロントエンドの全コードをコピー
+COPY . .
+
+# Nuxtの開発サーバを起動（npm run dev は docker-compose.yml で command 指定）
+EXPOSE 3000
