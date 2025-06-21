@@ -1,2 +1,3 @@
 AWSはECS FargateでECRからイメージをpullして利用
+
 .envやconfigはssmのパラメータストアを利用
