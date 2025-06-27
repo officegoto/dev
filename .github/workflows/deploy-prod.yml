@@ -1,0 +1,50 @@
+name: Deploy to Production (ECS)
+
+on:
+  push:
+    branches:
+      - main  # mainブランチへのpushをトリガーに実行
+
+jobs:
+  deploy-prod:
+    name: LaravelとNuxtを本番環境にデプロイ
+    runs-on: ubuntu-latest
+    steps:
+      - name: ソースコードをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: AWSクレデンシャルの設定
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Amazon ECR にログイン
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Laravel のDockerイメージをビルド＆プッシュ
+        run: |
+          docker build -t ${{ secrets.ECR_LARAVEL_REPO }}:latest -f docker/php/Dockerfile ./src
+          docker push ${{ secrets.ECR_LARAVEL_REPO }}:latest
+
+      - name: Nuxt のDockerイメージをビルド＆プッシュ
+        run: |
+          docker build -t ${{ secrets.ECR_NUXT_REPO }}:latest -f docker/nuxt/Dockerfile.prod ./frontend
+          docker push ${{ secrets.ECR_NUXT_REPO }}:latest
+
+      - name: Laravel を ECS にデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          service: your-laravel-prod-service
+          cluster: your-ecs-cluster-prod
+          task-definition: your-laravel-task-def-prod.json
+          wait-for-service-stability: true
+
+      - name: Nuxt を ECS にデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          service: your-nuxt-prod-service
+          cluster: your-ecs-cluster-prod
+          task-definition: your-nuxt-task-def-prod.json
+          wait-for-service-stability: true
