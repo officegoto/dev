@@ -21,3 +21,5 @@
 - [ ] ECS タスク定義ファイルをリポジトリに追加
   - `dev-laravel-task-def-prod.json`
   - `dev-nuxt-task-def-prod.json`
+  - `dev-laravel-task-def-stg.json`
+  - `dev-nuxt-task-def-stg.json`
