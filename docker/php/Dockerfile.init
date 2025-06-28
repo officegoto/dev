@@ -28,15 +28,18 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # 作業ディレクトリを設定
 WORKDIR /src
 
+# # 先に composer.json と composer.lock をコピーしてキャッシュを有効活用
+# COPY ./src/composer.json ./src/composer.lock /src/
+
+# # Composer の依存関係をインストール
+# RUN composer install --no-dev --optimize-autoloader
+
 # Laravelのソースコードをコンテナにコピー（ECS用）
 COPY ./src/ /src
 
-# Composer の依存関係をインストール
-RUN composer install --no-dev --optimize-autoloader
-
-# 権限の設定（エラーを防ぐため、ディレクトリ作成後に実行）
-RUN chown -R www-data:www-data . \
-    && chmod -R 775 storage bootstrap/cache
+# # 権限の設定（エラーを防ぐため、ディレクトリ作成後に実行）
+# RUN chown -R www-data:www-data . \
+#     && chmod -R 775 storage bootstrap/cache
 
 # PHP設定を適用
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini

@@ -67,6 +67,14 @@ services:
     networks:
       - dev-network
 
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"  # Web UI
+      - "1025:1025"  # SMTP
+    networks:
+      - dev-network
+
 networks:
   dev-network:
     driver: bridge

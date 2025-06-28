@@ -3,8 +3,8 @@ FROM nginx:1.26
 # AWS CLI をインストール（SSM Parameter Store を使用するため）
 RUN apt-get update && apt-get install -y awscli && rm -rf /var/lib/apt/lists/*
 
-# Laravelの public ディレクトリのみをコピー（ECS用）
-COPY ./src/ /src
+# # Laravelの public ディレクトリのみをコピー（ECS用）
+# COPY ./src/ /src
 
 # ローカル用の default.conf をコピー
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf

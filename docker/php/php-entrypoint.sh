@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# コンテナ起動後にボリュームで上書きされると無効になることがあるため再度実行
+chown -R www-data:www-data /src/storage /src/bootstrap/cache
+chmod -R 775 /src/storage /src/bootstrap/cache
+
 # ENV_MODE=aws の場合のみ、Parameter Store から /dev/.env を取得して /src/.env に反映する
 if [ "$ENV_MODE" = "aws" ]; then
   aws ssm get-parameter \
