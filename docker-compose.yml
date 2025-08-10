@@ -34,6 +34,8 @@ services:
       dockerfile: ../docker/nuxt/Dockerfile.dev
     volumes:
       - ./frontend:/app
+      - /app/node_modules
+      - /app/.nuxt
     ports:
       - "3000:3000"
     command: npm run dev
