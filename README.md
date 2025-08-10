@@ -17,7 +17,7 @@
 
 
 ```bash
-docker-compose build --no-cache
+docker-compose build
 docker-compose up -d
 docker-compose exec app bash
 chmod +x setup-laravel.sh
