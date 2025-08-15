@@ -6,7 +6,7 @@ on:
       - main  # mainブランチへのpushをトリガーに実行
 
 jobs:
-  deploy-prod:
+  deploy-prd:
     name: LaravelとNuxtを本番環境にデプロイ
     runs-on: ubuntu-latest
     steps:
@@ -30,21 +30,21 @@ jobs:
 
       - name: Nuxt のDockerイメージをビルド＆プッシュ
         run: |
-          docker build -t ${{ secrets.ECR_NUXT_REPO }}:latest -f docker/nuxt/Dockerfile.dev ./frontend
+          docker build -t ${{ secrets.ECR_NUXT_REPO }}:latest -f docker/nuxt/Dockerfile ./frontend
           docker push ${{ secrets.ECR_NUXT_REPO }}:latest
 
       - name: Laravel を ECS にデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          service: your-laravel-prod-service
-          cluster: your-ecs-cluster-prod
-          task-definition: your-laravel-task-def-prod.json
+          service: your-laravel-prd-service
+          cluster: your-ecs-cluster-prd
+          task-definition: your-laravel-task-def-prd.json
           wait-for-service-stability: true
 
       - name: Nuxt を ECS にデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          service: your-nuxt-prod-service
-          cluster: your-ecs-cluster-prod
-          task-definition: your-nuxt-task-def-prod.json
+          service: your-nuxt-prd-service
+          cluster: your-ecs-cluster-prd
+          task-definition: your-nuxt-task-def-prd.json
           wait-for-service-stability: true
