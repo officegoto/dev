@@ -25,7 +25,7 @@ jobs:
 
       - name: Laravel のDockerイメージをビルド＆プッシュ
         run: |
-          docker build -t ${{ secrets.ECR_LARAVEL_REPO }}:latest -f docker/php/Dockerfile ./src
+          docker build -t ${{ secrets.ECR_LARAVEL_REPO }}:latest -f docker/php/Dockerfile .
           docker push ${{ secrets.ECR_LARAVEL_REPO }}:latest
 
       - name: Nuxt のDockerイメージをビルド＆プッシュ
