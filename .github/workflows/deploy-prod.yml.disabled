@@ -30,7 +30,7 @@ jobs:
 
       - name: Nuxt のDockerイメージをビルド＆プッシュ
         run: |
-          docker build -t ${{ secrets.ECR_NUXT_REPO }}:latest -f docker/nuxt/Dockerfile.prod ./frontend
+          docker build -t ${{ secrets.ECR_NUXT_REPO }}:latest -f docker/nuxt/Dockerfile.dev ./frontend
           docker push ${{ secrets.ECR_NUXT_REPO }}:latest
 
       - name: Laravel を ECS にデプロイ
