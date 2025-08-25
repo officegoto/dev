@@ -20,6 +20,7 @@ services:
     container_name: nginx
     volumes:
       - ./src/public:/src/public
+      - ./src/storage:/src/storage
       - ./docker/nginx/logs:/var/log/nginx
     ports:
       - "80:80"
