@@ -29,10 +29,11 @@ chmod +x setup-laravel.sh
 - [ ] GitHub Secrets を以下のキーで登録
   - `AWS_ACCESS_KEY_ID`
   - `AWS_SECRET_ACCESS_KEY`
-  - `ECR_LARAVEL_REPO`, `ECR_NUXT_REPO`
+  - `ECR_LARAVEL_REPO`, `ECR_NUXT_REPO`, `ECR_NGINX_REPO`
 
 - [ ] ECS タスク定義ファイルをリポジトリに追加
   - `dev-laravel-task-def-prod.json`
   - `dev-nuxt-task-def-prod.json`
   - `dev-laravel-task-def-stg.json`
   - `dev-nuxt-task-def-stg.json`
+  - `dev-nginx-task-def-stg.json`

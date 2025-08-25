@@ -32,6 +32,11 @@ jobs:
         run: |
           docker build -t ${{ secrets.ECR_NUXT_REPO }}:stg -f docker/nuxt/Dockerfile.dev ./frontend
           docker push ${{ secrets.ECR_NUXT_REPO }}:stg
+      
+      - name: nginx のDockerイメージをビルド＆プッシュ
+        run: |
+          docker build -t ${{ secrets.ECR_NGINX_REPO }}:stg -f docker/nginx/Dockerfile .
+          docker push ${{ secrets.ECR_NGINX_REPO }}:stg
 
       - name: Laravel を ECS にデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -47,4 +52,12 @@ jobs:
           service: dev-nuxt-stg-service
           cluster: dev-ecs-cluster-stg
           task-definition: dev-nuxt-task-def-stg.json
+          wait-for-service-stability: true
+      
+      - name: nginx を ECS にデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          service: dev-nginx-stg-service
+          cluster: dev-ecs-cluster-stg
+          task-definition: dev-nginx-task-def-stg.json
           wait-for-service-stability: true

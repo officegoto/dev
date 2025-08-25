@@ -25,13 +25,18 @@ jobs:
 
       - name: Laravel のDockerイメージをビルド＆プッシュ
         run: |
-          docker build -t ${{ secrets.ECR_LARAVEL_REPO }}:latest -f docker/php/Dockerfile .
-          docker push ${{ secrets.ECR_LARAVEL_REPO }}:latest
+          docker build -t ${{ secrets.ECR_LARAVEL_REPO }}:prd -f docker/php/Dockerfile .
+          docker push ${{ secrets.ECR_LARAVEL_REPO }}:prd
 
       - name: Nuxt のDockerイメージをビルド＆プッシュ
         run: |
-          docker build -t ${{ secrets.ECR_NUXT_REPO }}:latest -f docker/nuxt/Dockerfile ./frontend
-          docker push ${{ secrets.ECR_NUXT_REPO }}:latest
+          docker build -t ${{ secrets.ECR_NUXT_REPO }}:prd -f docker/nuxt/Dockerfile ./frontend
+          docker push ${{ secrets.ECR_NUXT_REPO }}:prd
+
+      - name: nginx のDockerイメージをビルド＆プッシュ
+        run: |
+          docker build -t ${{ secrets.ECR_NGINX_REPO }}:prd -f docker/nginx/Dockerfile .
+          docker push ${{ secrets.ECR_NGINX_REPO }}:prd
 
       - name: Laravel を ECS にデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -47,4 +52,12 @@ jobs:
           service: your-nuxt-prd-service
           cluster: your-ecs-cluster-prd
           task-definition: your-nuxt-task-def-prd.json
+          wait-for-service-stability: true
+
+      - name: nginx を ECS にデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          service: dev-nginx-prd-service
+          cluster: dev-ecs-cluster-prd
+          task-definition: dev-nginx-task-def-prd.json
           wait-for-service-stability: true
