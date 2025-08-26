@@ -1,0 +1,40 @@
+# === 共通 ===
+**/.git/**
+**/.history/**
+**/.DS_Store
+**/*.log
+**/coverage/**
+**/dist/**
+
+# === Nuxt(frontend) ===
+frontend/node_modules/**
+frontend/.nuxt/**
+frontend/.output/**
+frontend/.cache/**
+frontend/.vite/**
+frontend/.turbo/**
+frontend/.pnpm-store/**
+frontend/.eslintcache
+frontend/.stylelintcache
+
+# 生成物や静的出力（必要に応じて）
+frontend/.vercel/**
+frontend/.netlify/**
+frontend/.swr/**
+frontend/.nuxt-telemetry/**
+
+# === Laravel(src) ===
+src/vendor/**
+src/storage/framework/**
+src/storage/logs/**
+src/storage/debugbar/**
+# ※ storage/app は必要に応じて。大きいバイナリを置く場合は配下を個別指定で除外推奨
+# 例) src/storage/app/tmp/**
+
+# public のビルド・配布物（Vite等を使っている場合）
+src/public/build/**
+# 画像アップロード実体（大容量対策で Cursor からは外す）
+src/public/storage/**
+
+# === Docker/ログ ===
+docker/**/logs/**
