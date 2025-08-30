@@ -1,25 +1,37 @@
 <template>
   <section>
-    <h1>Welcome</h1>
-    <p>これは Nuxt 3 で構築した静的ブログのサンプルです。</p>
-    <p>
-      <NuxtLink to="/articles">記事一覧へ</NuxtLink>
-    </p>
+    <h1>記事一覧</h1>
+    <ul class="list">
+      <li v-for="a in articles" :key="a.slug" class="item">
+        <NuxtLink :to="`/articles/${a.slug}`" class="title">{{ a.title }}</NuxtLink>
+        <div class="meta">
+          <time :datetime="a.createdAt">{{ formatDate(a.createdAt) }}</time>
+          <span v-if="a.tags?.length">・{{ a.tags?.join(', ') }}</span>
+        </div>
+        <p class="summary">{{ a.summary }}</p>
+      </li>
+    </ul>
   </section>
-  
+
 </template>
 
 <script setup lang="ts">
-// Home page
+import type { Article } from '~/types/article'
+
+const { data: articles } = await useFetch<Article[]>('/api/articles')
+
+function formatDate(s: string): string {
+  return new Date(s).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })
+}
 </script>
 
 <style scoped>
-h1 {
-  margin: 0 0 0.5rem 0;
-}
-p {
-  margin: 0 0 0.5rem 0;
-}
+h1 { margin: 0 0 1rem 0; }
+.list { list-style: none; padding: 0; margin: 0; }
+.item { padding: 0.75rem 0; border-bottom: 1px solid #e5e7eb; }
+.title { font-weight: 600; }
+.meta { color: #6b7280; font-size: 0.875rem; margin-top: 0.125rem; }
+.summary { margin: 0.25rem 0 0; color: #374151; }
 </style>
 
 

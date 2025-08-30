@@ -15,21 +15,18 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { useArticles } from '~/composables/useArticles'
 import type { Article } from '~/types/article'
 
 const route = useRoute()
-const { getBySlug } = useArticles()
-
 const slug = String(route.params.slug)
-const article: Article | undefined = getBySlug(slug)
+const { data: article } = await useFetch<Article>(`/api/articles/${slug}`)
 
-useHead({
-  title: article ? `${article.title} | My Blog` : '記事が見つかりません | My Blog',
+useHead(() => ({
+  title: article.value ? `${article.value.title} | My Blog` : '記事が見つかりません | My Blog',
   meta: [
-    { name: 'description', content: article?.summary || 'Static article' }
+    { name: 'description', content: article.value?.summary || 'Static article' }
   ]
-})
+}))
 
 function formatDate(s: string): string {
   return new Date(s).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })

@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Article;
+use Illuminate\Http\JsonResponse;
+
+class ArticleController extends Controller
+{
+    public function index(): JsonResponse
+    {
+        $articles = Article::query()
+            ->orderByDesc('created_at')
+            ->get(['slug','title','summary','tags','created_at']);
+
+        return response()->json($articles);
+    }
+
+    public function show(string $slug): JsonResponse
+    {
+        $article = Article::query()
+            ->where('slug', $slug)
+            ->firstOrFail(['slug','title','summary','content','tags','created_at']);
+
+        return response()->json($article);
+    }
+}
+
+

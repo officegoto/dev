@@ -15,11 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { useArticles } from '~/composables/useArticles'
-import type { ComputedRef } from 'vue'
 import type { Article } from '~/types/article'
 
-const articles: ComputedRef<Article[]> = useArticles().articles
+const { data: articles, status, error } = await useFetch<Article[]>('/api/articles')
 
 function formatDate(s: string): string {
   return new Date(s).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })
