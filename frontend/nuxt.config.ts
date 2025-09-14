@@ -5,9 +5,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   runtimeConfig: {
-    public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost' // overridden in docker or .env.*
-    }
+    // Private (server-only). Clientは参照しない
+    apiBase: process.env.NUXT_API_BASE ?? process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost',
+    public: {}
   },
   nitro: {
     prerender: {
