@@ -2,10 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { defineEventHandler, createError, setResponseHeader } from 'h3'
-import { createBackendFetch } from '../utils/http'
-import { mapBackendArticles } from '../utils/article'
-
- 
+import { createBackendFetch } from '../../utils/http'
+import { mapBackendArticles } from '../../utils/article'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -17,5 +15,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 502, statusMessage: 'Upstream fetch failed', data: { message: err?.message } })
   }
 })
+
+
 
 
