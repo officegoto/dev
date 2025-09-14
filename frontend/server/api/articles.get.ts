@@ -2,7 +2,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { defineEventHandler, createError, setResponseHeader } from 'h3'
-import { createBackendFetch, mapBackendArticles } from '../utils/bff'
+import { createBackendFetch } from '../utils/http'
+import { mapBackendArticles } from '../utils/article'
+
+ 
 
 export default defineEventHandler(async (event) => {
   try {

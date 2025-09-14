@@ -1,7 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { defineEventHandler, getRouterParam, createError, setResponseHeader } from 'h3'
-import { createBackendFetch, mapBackendArticle } from '../../utils/bff'
+import { createBackendFetch } from '../../utils/http'
+import { mapBackendArticle } from '../../utils/article'
+
+ 
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug')
