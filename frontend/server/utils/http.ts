@@ -1,10 +1,9 @@
-// Use lazy import to avoid editor type issues; Nuxt provides these at runtime
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { useRuntimeConfig } from '#imports'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { $fetch } from 'ofetch'
+// @ts-ignore
+import { getCookie } from 'h3'
 
 export function getApiBase(event: any): string {
   const config = useRuntimeConfig() as any
@@ -15,12 +14,19 @@ export function getApiBase(event: any): string {
 export function createBackendFetch(event: any) {
   const baseURL = getApiBase(event)
   const headers = (event?.node?.req?.headers || {}) as Record<string, string | string[] | undefined>
-  const cookie = headers['cookie'] as string | undefined
-  const authorization = headers['authorization'] as string | undefined
+  const cookieHeader = headers['cookie'] as string | undefined
+  let authorization = headers['authorization'] as string | undefined
+
+  // Authorization が未設定の場合、クッキーの auth_token から生成する
+  const token = getCookie(event, 'auth_token')
+  if (!authorization && token) {
+    authorization = `Bearer ${token}`
+  }
+
   return $fetch.create({
     baseURL,
     headers: {
-      ...(cookie ? { cookie } : {}),
+      ...(cookieHeader ? { cookie: cookieHeader } : {}),
       ...(authorization ? { authorization } : {}),
     },
     timeout: 10_000,

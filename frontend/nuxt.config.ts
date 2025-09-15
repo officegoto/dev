@@ -9,6 +9,9 @@ export default defineNuxtConfig({
     apiBase: process.env.NUXT_API_BASE ?? process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost',
     public: {}
   },
+  routeRules: {
+    '/admin/**': { ssr: false }
+  },
   nitro: {
     prerender: {
       routes: [
