@@ -47,7 +47,7 @@ import { reactive, ref, watch } from 'vue'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-definePageMeta({ layout: 'admin', middleware: 'admin' })
+definePageMeta({ layout: 'admin' })
 
 type NewArticleForm = {
   title: string

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-definePageMeta({ layout: 'admin', middleware: 'admin' })
+definePageMeta({ layout: 'admin' })
 import type { Article } from '~/types/article'
 
 const { data: articles } = await useFetch<Article[]>('/api/articles')
